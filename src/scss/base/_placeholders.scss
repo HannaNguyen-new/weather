@@ -1,0 +1,6 @@
+@use './base/variables'
+%glass {
+    background-color: $primary-color;
+    opacity: 0.69;
+    box-shadow: $box-shadow;
+}

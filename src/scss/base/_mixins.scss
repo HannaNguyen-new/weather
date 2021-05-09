@@ -1,0 +1,14 @@
+@mixin size($height,$width,$borderRadius,$padding){
+    height: $height;
+    width: $width;
+    border-radius: $borderRadius;
+    padding: $padding
+}
+
+@mixin fontStyle($size,$color,$shadow,$lineHeight,$align){
+    font-size: $size;
+    color: $color;
+    text-shadow: $shadow;
+    line-height: $lineHeight;
+    text-align: $align
+}
