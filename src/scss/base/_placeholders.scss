@@ -1,4 +1,4 @@
-@use '/src/scss' as *;
+@use './index' as *;
 %glass {
     background-color: $primary-color;
     opacity: 0.69;
