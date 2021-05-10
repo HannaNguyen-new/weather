@@ -1,1 +1,3 @@
-@use './base/variables'
+@forward  '../scss/base/mixins';
+@forward  '../scss/base/variables';
+@forward  '../scss/base/placeholders';

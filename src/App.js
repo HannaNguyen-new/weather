@@ -1,4 +1,4 @@
-import "./App.css";
+import "./scss/App.scss";
 import DaysBar from "../components/DaysBar";
 import HoursBar from "../components/HoursBar";
 import MainDisplay from "../components/MainDisplay";
