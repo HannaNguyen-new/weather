@@ -12,3 +12,7 @@
     line-height: $lineHeight;
     text-align: $align
 }
+ @mixin background($background, $repeat){
+     background: $background;
+     background-repeat: $repeat
+ }

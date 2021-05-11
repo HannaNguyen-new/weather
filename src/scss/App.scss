@@ -1,7 +1,34 @@
-.App {
-   background-image: linear-gradient(to bottom, #a4ebf3, #ccf2f4, #dffdff);
-   background-repeat: no-repeat;
-   height: 100vh;
-   font-family: 'Nunito', sans-serif;
- }
- 
+
+.app{
+    @include background($background, no-repeat);
+    height: 100vh;
+    font-family: $font
+}
+.searchHistory{
+    @include size(170px, 140px, 0, 5px);
+    @include fontStyle(18px, $secondary-color, $textShadow, 30px, center);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.46) 51.56%, rgba(255, 255, 255, 0.0322) 100%);
+
+        .searchResult{
+            color: $third-color;
+            text-shadow: none
+        }
+}
+
+.weatherCard{
+    @include size(170px, 340px, 0, 0);
+    @include fontStyle(18px, $primary-color, $textShadow, 30px, center);
+
+        .location{
+            font-size: 40px
+        };
+
+        .status{
+            font-size: 18px;
+            margin-bottom: 5px
+        };
+
+        .temp{
+            font-size: 55px
+        }
+}
