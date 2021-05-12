@@ -1,8 +1,20 @@
 @use './base/' as *;
-.app{
+*{
+    margin: 0;
+    padding: 0
+}
+.App{
     @include background($background, no-repeat);
     height: 100vh;
     font-family: $font
+}
+.searchBar{
+    @extend %glass;
+    @include size(40px, 600px, 15px, 0);
+    margin: 0 auto;
+    transform: translateY(25px)
+    
+    
 }
 .searchHistory{
     @include size(170px, 140px, 0, 5px);
@@ -14,7 +26,12 @@
             text-shadow: none
         }
 }
+.cardContainer{
+    display: flex;
+    width: 800px;
+    margin: 50px auto;
 
+}
 .weatherCard{
     @include size(170px, 340px, 0, 0);
     @include fontStyle(18px, $primary-color, $textShadow, 30px, center);

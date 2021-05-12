@@ -1,4 +1,4 @@
-@use '../base/' as *;
+@use './variables' as *;
 %glass {
     background-color: $primary-color;
     opacity: 0.69;
