@@ -1,4 +1,4 @@
-
+@use './base/' as *;
 .app{
     @include background($background, no-repeat);
     height: 100vh;
