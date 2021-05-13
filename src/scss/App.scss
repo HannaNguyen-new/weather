@@ -20,6 +20,8 @@
     @include size(170px, 140px, 0, 5px);
     @include fontStyle(18px, $secondary-color, $textShadow, 30px, center);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.46) 51.56%, rgba(255, 255, 255, 0.0322) 100%);
+    position: absolute;
+    top: 90px;
 
         .searchResult{
             color: $third-color;
@@ -29,12 +31,12 @@
 .cardContainer{
     display: flex;
     width: 800px;
-    margin: 50px auto;
+    margin: 50px auto 20px;
 
 }
 .weatherCard{
     @include size(170px, 340px, 0, 0);
-    @include fontStyle(18px, $primary-color, $textShadow, 30px, center);
+    @include fontStyle(18px, $primary-color, $textShadow, 45px, center);
 
         .location{
             font-size: 40px
@@ -47,5 +49,18 @@
 
         .temp{
             font-size: 55px
+        }
+}
+
+.daysContainer{
+    @extend %glass;
+    @include size(50px, 900px, 15px, 5px);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 0 auto;
+
+        .day{
+            text-align: center;
         }
 }
