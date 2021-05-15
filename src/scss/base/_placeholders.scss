@@ -1,6 +1,13 @@
 @use './variables' as *;
+@use './mixins' as mixins;
 %glass {
     background-color: $primary-color;
     opacity: 0.69;
     box-shadow: $box-shadow;
+}
+
+%slider-thumb{
+    appearance: none;
+    @include mixins.size(20px, 20px, 50%, 0);
+    background: $secondary-color;
 }

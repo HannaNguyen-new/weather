@@ -3,7 +3,7 @@ import React from 'react'
 function DaysBar() {
    return (
       <div className='daysContainer'>
-         <i class="fas fa-chevron-right"></i>
+         <i className="fas fa-chevron-left"></i>
          <div className='day'>
             <p>Today</p>
             <p>5/8</p>
@@ -35,6 +35,7 @@ function DaysBar() {
             <p>Sun</p>
             <p>5/12</p>
          </div>
+         <i className="fas fa-chevron-right"></i>
       </div>
    )
 }

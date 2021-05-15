@@ -1,66 +1,116 @@
 @use './base/' as *;
-*{
-    margin: 0;
-    padding: 0
+* {
+  margin: 0;
+  padding: 0;
 }
-.App{
-    @include background($background, no-repeat);
-    height: 100vh;
-    font-family: $font
+.App {
+  @include background($background, no-repeat);
+  @include fontStyle(18px, $secondary-color, $textShadow, 30px, center);
+  height: 100vh;
+  font-family: $font;
+    .container{
+        width: 70vw;
+        margin: 0 auto;
+    }
 }
-.searchBar{
-    @extend %glass;
-    @include size(40px, 600px, 15px, 0);
-    margin: 0 auto;
-    transform: translateY(25px)
-    
-    
+.searchBar {
+  @extend %glass;
+  @include size(40px, 600px, 15px, 0);
+  margin: 0 auto;
+  transform: translateY(25px);
 }
-.searchHistory{
-    @include size(170px, 140px, 0, 5px);
-    @include fontStyle(18px, $secondary-color, $textShadow, 30px, center);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.46) 51.56%, rgba(255, 255, 255, 0.0322) 100%);
-    position: absolute;
-    top: 90px;
+.searchHistory {
+  @include size(170px, 140px, 0, 5px);
+  position: absolute;
+  top: 90px;
 
-        .searchResult{
-            color: $third-color;
-            text-shadow: none
-        }
+  .searchResult {
+    color: $third-color;
+    text-shadow: none;
+  }
 }
-.cardContainer{
-    display: flex;
-    width: 800px;
-    margin: 50px auto 20px;
-
+.cardContainer {
+  display: flex;
+  width: 800px;
+  margin: 50px auto 20px;
 }
-.weatherCard{
-    @include size(170px, 340px, 0, 0);
-    @include fontStyle(18px, $primary-color, $textShadow, 45px, center);
+.weatherCard {
+  @include size(170px, 340px, 0, 0);
+  @include fontStyle(18px, $primary-color, $textShadow, 45px, center);
 
-        .location{
-            font-size: 40px
-        };
+  .location {
+    font-size: 40px;
+  }
 
-        .status{
-            font-size: 18px;
-            margin-bottom: 5px
-        };
+  .status {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
 
-        .temp{
-            font-size: 55px
-        }
+  .temp {
+    font-size: 55px;
+  }
 }
 
-.daysContainer{
-    @extend %glass;
-    @include size(50px, 900px, 15px, 5px);
+.daysContainer {
+  @extend %glass;
+  @include size(50px, 720px, 15px, 5px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 auto;
+
+  .fas{
+      cursor: pointer;
+  }
+  .day {
+    text-align: center;
+    width: 50px;
+  }
+}
+
+.hoursContainer {
+  width: 50px;
+  display: flex;
+  justify-content: space-evenly;
+  transform: translate(200px, 40px);
+
+  p {
+    line-height: 45px;
+  }
+  
+  .slider {
+    @include size(3px, 240px, 5px, 0);
+    appearance: none;
+    outline: none;
+    transform: rotate(270deg) translate(-115px, -70px) ;
+    cursor: pointer;
+    background: $secondary-color;
+  }
+
+  .slider::-webkit-slider-thumb {
+    @extend %slider-thumb;
+  }
+}
+
+// .slider::-moz-range-thumb{
+//     @extend %slider-thumb;
+
+// }
+// .slider::-ms-thumb{
+//     @extend %slider-thumb;
+
+// }
+.mainDisplay{
+    @include size(300px, 700px, 0, 0);
     display: flex;
     justify-content: space-evenly;
-    align-items: center;
-    margin: 0 auto;
-
-        .day{
-            text-align: center;
-        }
+    transform: translate(240px, -250px);
+    
+    .iconsContainer{
+        @include size(100%, 20px, 0, 0);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
 }
