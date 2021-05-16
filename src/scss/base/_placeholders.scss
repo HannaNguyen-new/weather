@@ -11,3 +11,9 @@
     @include mixins.size(20px, 20px, 50%, 0);
     background: $secondary-color;
 }
+
+%clearDefault{
+    appearance: none;
+    outline: none;
+    border: none;
+}

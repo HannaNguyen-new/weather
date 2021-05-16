@@ -8,14 +8,16 @@
   @include fontStyle(18px, $secondary-color, $textShadow, 30px, center);
   height: 100vh;
   font-family: $font;
-    .container{
-        width: 70vw;
-        margin: 0 auto;
-    }
+  .container {
+    width: 70vw;
+    margin: 0 auto;
+  }
 }
 .searchBar {
   @extend %glass;
-  @include size(40px, 600px, 15px, 0);
+  @include size(40px, 600px, 15px, 1px 20px);
+  @extend %clearDefault;
+  font-size: 24px;
   margin: 0 auto;
   transform: translateY(25px);
 }
@@ -60,8 +62,8 @@
   align-items: center;
   margin: 0 auto;
 
-  .fas{
-      cursor: pointer;
+  .fas {
+    cursor: pointer;
   }
   .day {
     text-align: center;
@@ -78,12 +80,11 @@
   p {
     line-height: 45px;
   }
-  
+
   .slider {
     @include size(3px, 240px, 5px, 0);
-    appearance: none;
-    outline: none;
-    transform: rotate(270deg) translate(-115px, -70px) ;
+    @extend %clearDefault;
+    transform: rotate(270deg) translate(-115px, -70px);
     cursor: pointer;
     background: $secondary-color;
   }
@@ -101,16 +102,16 @@
 //     @extend %slider-thumb;
 
 // }
-.mainDisplay{
-    @include size(300px, 700px, 0, 0);
+.mainDisplay {
+  @include size(300px, 700px, 0, 0);
+  display: flex;
+  justify-content: space-evenly;
+  transform: translate(240px, -250px);
+
+  .iconsContainer {
+    @include size(100%, 20px, 0, 0);
     display: flex;
+    flex-direction: column;
     justify-content: space-evenly;
-    transform: translate(240px, -250px);
-    
-    .iconsContainer{
-        @include size(100%, 20px, 0, 0);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-    }
+  }
 }
