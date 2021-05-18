@@ -8,32 +8,37 @@ import WeatherCard from "./components/WeatherCard";
 
 function App() {
 
-  
-  
-  async function firstState(){
-   // const geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=fukuoka&appid=b215978ae0b5adea831c87cd99ac6d51";
-    const coordinates = await fetch(geoUrl)
-    .then(res => res.json())
-    .then(res => res[0])
-    .catch(err => console.log(err))
+  async function fetchWeather(){
+   //const geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=fukuoka&appid=b215978ae0b5adea831c87cd99ac6d51";
+    const response = await fetch(geoUrl)
+    const coordinates = await response.json()
     
-    const { lat, lon } = coordinates
+    const { lat, lon } = coordinates[0]
     
-    //const url =  "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=minutely&appid=b215978ae0b5adea831c87cd99ac6d51"
-    return await fetch(url)
-    .then(res => res.json())
-    .catch(err => console.log(err))
+   //const url =  "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=minutely&appid=b215978ae0b5adea831c87cd99ac6d51"
+    const result = await fetch(url)
+    const weatherData = await result.json()
+
+    if(!response.ok || !result.ok){
+      const message = `Error: ${response.status || result.status}`
+      throw new Error(message)
+    }
+    return weatherData
+
     
   }
-    const firstData = firstState();
 
+    const firstData = fetchWeather()
+    .then(res => res)
+    .catch(err => err.message)
 
+  
 
   return (
     <div className="App">
       <div className='container'>
       <SearchBar />
-      <WeatherCard data={firstData}/>
+      <WeatherCard/>
       <SearchHistory />
       <DaysBar/>
       <HoursSlider/>
