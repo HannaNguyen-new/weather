@@ -8,7 +8,8 @@ import WeatherCard from "./components/WeatherCard";
 import { useState, useEffect } from "react";
 
 function App() {
-  const [data, updateData] = useState(fetchWeather())
+  const [data, updateData] = useState({})
+  const [isLoaded, updateStatus] = useState(false)
   async function fetchWeather(){
    const geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=fukuoka&appid=b215978ae0b5adea831c87cd99ac6d51";
     const response = await fetch(geoUrl)
@@ -31,16 +32,20 @@ function App() {
 
   useEffect(() => {
     fetchWeather()
-    .then(res => updateData(res))
+    .then(res => {
+      updateData(res)
+      updateStatus(true)
+    })
     .catch(err => err.message)
 
   }, [])
 
 
   
-
+  if(isLoaded){
   return (
     <div className="App">
+     
       <div className='container'>
       <SearchBar />
       <WeatherCard content={data} />
@@ -50,8 +55,12 @@ function App() {
       <MainDisplay/>
 
       </div>
+
     </div>
   );
+}else{
+  return null
+}
 }
 
 export default App;
