@@ -1,7 +1,9 @@
 import React from "react"
 
 function WeatherCard(props) {
-   
+
+  
+
    return (
       <div className="cardContainer">
       <div className='weatherCard'>
