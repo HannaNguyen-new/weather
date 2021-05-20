@@ -84,7 +84,7 @@
   .slider {
     @include size(3px, 240px, 5px, 0);
     @extend %clearDefault;
-    transform: rotate(270deg) translate(-115px, -70px);
+    transform: rotate(90deg) translate(115px, 50px);
     cursor: pointer;
     background: $secondary-color;
   }
