@@ -20,9 +20,17 @@ function App() {
   const [currentCoords,updateCurrentCoords] = useState({})
   const [coordsFetched, updateFetchStatus] = useState(false)
   const [locationName, updateLocationName] = useState("")
-  const [weather, updateWeather] = useState({})
+  const [card1, updateCard1] = useState({})
   const [isLoaded, updateStatus] = useState(false)
 
+
+  const getCoords = async() => {
+    const url = 'https://lookup.search.hereapi.com/v1/lookup?apiKey=' + config.openAPI_key + '&id=' + chosenLocation;
+    const result = await fetch(url)
+    const coords =  result.json()
+    const {lat,lon} = coords
+  
+  }
   const getCurrentCoords = async() => {
     navigator.geolocation.getCurrentPosition(position => {
       updateCurrentCoords(position.coords);
@@ -31,7 +39,7 @@ function App() {
   }
   const findNearestCity = async(lat,lon) => {
    const url = "http://api.openweathermap.org/geo/1.0/reverse?lat=" + lat +
-   "&lon=" + lon + "&limit=5&appid=" + config.reverseGeo_key
+   "&lon=" + lon + "&limit=5&appid=" + config.openAPI_key
    const result = await fetch(url)
   const nearestCities = await result.json()
   if (!result.ok) {
@@ -44,7 +52,7 @@ function App() {
   const fetchWeather = async(lat,lon) => {
 
     const url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + 
-    "&lon=" + lon + "&exclude=minutely&appid=" + config.onecallAPI_key
+    "&lon=" + lon + "&exclude=minutely&appid=" + config.openAPI_key + '&units=metric'
     const result = await fetch(url)
     const weatherData = await result.json()
 
@@ -63,7 +71,7 @@ function App() {
       const promise2 = findNearestCity(latitude,longitude);
       Promise.all([promise1,promise2])
       .then(values => {
-        updateWeather(values[0]);
+        updateCard1(values[0]);
         updateLocationName(values[1][0]);
         updateStatus(true)
       })
@@ -80,7 +88,7 @@ function App() {
 
         <div className='container'>
           <SearchBar />
-          <WeatherCard content={weather} location={locationName} />
+          <WeatherCard content={card1} location={locationName} />
           <SearchHistory />
           <DaysBar />
           <HoursSlider />

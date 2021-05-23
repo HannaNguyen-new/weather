@@ -6,8 +6,8 @@ function SearchBar() {
   const [input, updateInput] = useState("");
   const [suggestion, updateSuggestion] = useState("")
   const url = "https://autocomplete.search.hereapi.com/v1/autocomplete";
+  const [chosenLocation,updateChosenLocation] = useState("")
 
- // Shall i create my own Hook to trigger render when input is empty?
   const search = (event) => {
     const { value } = event.target;
     updateInput(value)
@@ -23,13 +23,14 @@ function SearchBar() {
           updateSuggestion(arr);
         })
     }
+    updateSuggestion("")
   };
 
-  useEffect(() =>{
-    if(input.length == 0){
-      updateSuggestion("")
+    // pass this function as props to suggestion  
+    const getChosenLocation = (location) => {
+      const id = location.key;
+      updateChosenLocation(id)
     }
-  },[input])
 
   return (
     <div>
