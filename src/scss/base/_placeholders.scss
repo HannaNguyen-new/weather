@@ -17,3 +17,8 @@
     outline: none;
     border: none;
 }
+%hover{
+    background: $secondary-color;
+    opacity: 0.5;
+    color: $primary-color;
+}

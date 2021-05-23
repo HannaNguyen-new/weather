@@ -115,3 +115,14 @@
     justify-content: space-evenly;
   }
 }
+.suggestion {
+  width: 600px;
+  @extend %glass;
+  opacity: 0.5;
+  margin: 27px auto;
+  text-align: center;
+  
+  div:hover {
+    @extend %hover;
+  }
+}
