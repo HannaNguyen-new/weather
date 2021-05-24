@@ -22,10 +22,13 @@ function App() {
   const [locationName, updateLocationName] = useState("")
   const [card1, updateCard1] = useState({})
   const [isLoaded, updateStatus] = useState(false)
+  const [locationId, updateLocationId] = useState("")
 
-
+  const getLocationId = (id) => {
+    updateLocationId(id)
+  }
   const getCoords = async() => {
-    const url = 'https://lookup.search.hereapi.com/v1/lookup?apiKey=' + config.openAPI_key + '&id=' + chosenLocation;
+    const url = 'https://lookup.search.hereapi.com/v1/lookup?apiKey=' + config.openAPI_key + '&id=' + locationId ;
     const result = await fetch(url)
     const coords =  result.json()
     const {lat,lon} = coords
@@ -87,7 +90,7 @@ function App() {
       <div className="App">
 
         <div className='container'>
-          <SearchBar />
+          <SearchBar getId={getLocationId} />
           <WeatherCard content={card1} location={locationName} />
           <SearchHistory />
           <DaysBar />
