@@ -23,15 +23,36 @@ function App() {
   const [card1, updateCard1] = useState({})
   const [isLoaded, updateStatus] = useState(false)
   const [locationId, updateLocationId] = useState("")
+  const [secondLocationName, updateSecondLocationName] = useState("")
+  const [card2, updateCard2] = useState("")
 
   const getLocationId = (id) => {
     updateLocationId(id)
   }
+  useEffect(() => {
+    if(locationId.length > 0) {
+      const {lat,lon} = getCoords()
+      .then(result => result)
+      .catch(err => console.log(err))
+  
+      const promise1 = fetchWeather(lat, lon);
+      const promise2 = findNearestCity(lat, lon);
+      Promise.all([promise1,promise2])
+      .then(values => {
+        updateCard2(values[0]);
+        updateSecondLocationName(values[1][0]);
+      })
+       .catch(err => err.message)
+
+    }
+
+    
+  },[locationId])
   const getCoords = async() => {
     const url = 'https://lookup.search.hereapi.com/v1/lookup?apiKey=' + config.openAPI_key + '&id=' + locationId ;
     const result = await fetch(url)
     const coords =  result.json()
-    const {lat,lon} = coords
+    return coords
   
   }
   const getCurrentCoords = async() => {
@@ -69,9 +90,9 @@ function App() {
   useEffect(()=> {
     getCurrentCoords();
     if(coordsFetched){
-      const {latitude,longitude} = currentCoords;
-      const promise1 = fetchWeather(latitude,longitude);
-      const promise2 = findNearestCity(latitude,longitude);
+      const {lat, lon} = currentCoords;
+      const promise1 = fetchWeather(lat, lon);
+      const promise2 = findNearestCity(lat, lon);
       Promise.all([promise1,promise2])
       .then(values => {
         updateCard1(values[0]);
@@ -91,7 +112,7 @@ function App() {
 
         <div className='container'>
           <SearchBar getId={getLocationId} />
-          <WeatherCard content={card1} location={locationName} />
+          <WeatherCard card1={card1} location1={locationName} card2={card2} location2={secondLocationName} />
           <SearchHistory />
           <DaysBar />
           <HoursSlider />
@@ -104,7 +125,7 @@ function App() {
   }else{
     return (
       <div>
-        <h1 className="App">Loading...</h1>
+        <h1 className="App">Loading...We're getting everything ready !</h1>
       </div>
     )
   }
