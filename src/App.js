@@ -90,7 +90,7 @@ function App() {
   useEffect(()=> {
     getCurrentCoords();
     if(coordsFetched){
-      const {lat, lon} = currentCoords;
+      const {latitude: lat, longitude: lon} = currentCoords;
       const promise1 = fetchWeather(lat, lon);
       const promise2 = findNearestCity(lat, lon);
       Promise.all([promise1,promise2])
