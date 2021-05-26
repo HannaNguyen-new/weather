@@ -4,7 +4,7 @@ import React from 'react';
 export default function Suggestion(props) {
 
     const handleClick = event => {
-        const id = event.target.key;
+        const id = event.target.id;
         props.getData(id)
     }
 

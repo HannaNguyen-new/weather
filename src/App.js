@@ -23,33 +23,42 @@ function App() {
   const [card1, updateCard1] = useState({})
   const [isLoaded, updateStatus] = useState(false)
   const [locationId, updateLocationId] = useState("")
-  const [secondLocationName, updateSecondLocationName] = useState("")
+  const [secondCoords, updateSecondCoords] = useState("")
+  const [secondCoordsFetched, updateSecondStatus] = useState("")
+  const [secondLocationName, updateSecondLocationName] = useState(false)
   const [card2, updateCard2] = useState("")
-// test
+
   const getLocationId = (id) => {
     updateLocationId(id)
   }
   useEffect(() => {
     if(locationId.length > 0) {
-      const {lat,lon} = getCoords()
-      .then(result => result)
-      .catch(err => console.log(err))
-  
-      const promise1 = fetchWeather(lat, lon);
-      const promise2 = findNearestCity(lat, lon);
-      Promise.all([promise1,promise2])
-      .then(values => {
-        updateCard2(values[0]);
-        updateSecondLocationName(values[1][0]);
+     getCoords()
+      .then(result => {
+        updateSecondCoords(result.position)
+        updateSecondStatus(true)
       })
-       .catch(err => err.message)
+      .catch(err => console.log(err))
+      if(secondCoordsFetched){
+        console.log("i run")
+        const {lat,lng : lon} = secondCoords
+        const promise1 = fetchWeather(lat, lon);
+        const promise2 = findNearestCity(lat, lon);
+        Promise.all([promise1,promise2])
+        .then(values => {
+          updateCard2(values[0]);
+          updateSecondLocationName(values[1][0]);
+          console.log(card2)
+        })
+         .catch(err => err.message)
+      }
 
     }
 
     
-  },[locationId])
+  },[locationId,secondCoordsFetched])
   const getCoords = async() => {
-    const url = 'https://lookup.search.hereapi.com/v1/lookup?apiKey=' + config.openAPI_key + '&id=' + locationId ;
+    const url = 'https://lookup.search.hereapi.com/v1/lookup?apiKey=' + config.hereAPI_key + '&id=' + locationId ;
     const result = await fetch(url)
     const coords =  result.json()
     return coords
