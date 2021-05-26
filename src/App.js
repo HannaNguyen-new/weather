@@ -25,7 +25,7 @@ function App() {
   const [locationId, updateLocationId] = useState("")
   const [secondLocationName, updateSecondLocationName] = useState("")
   const [card2, updateCard2] = useState("")
-// comment
+
   const getLocationId = (id) => {
     updateLocationId(id)
   }
