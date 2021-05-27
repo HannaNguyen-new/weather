@@ -17,46 +17,43 @@ function App() {
   // hour = hour.slice(1)
   // const utc = Date.UTC(year,month-1,date,hour)
   // const epoch = Math.floor(utc/1000) 
-  const [currentCoords,updateCurrentCoords] = useState({})
-  const [coordsFetched, updateFetchStatus] = useState(false)
-  const [locationName, updateLocationName] = useState("")
-  const [card1, updateCard1] = useState({})
-  const [isLoaded, updateStatus] = useState(false)
-  const [locationId, updateLocationId] = useState("")
-  const [secondCoords, updateSecondCoords] = useState("")
-  const [secondCoordsFetched, updateSecondStatus] = useState("")
-  const [secondLocationName, updateSecondLocationName] = useState(false)
-  const [card2, updateCard2] = useState("")
 
-  const getLocationId = (id) => {
-    updateLocationId(id)
-  }
+  const history = [];
+  const [currentCoords,updateCurrentCoords] = useState('')
+  //const [coordsFetched, updateFetchStatus] = useState(false)
+  const [locationName, updateLocationName] = useState("")
+  const [card1, updateCard1] = useState({location:'', weather:''})
+  const [card2, updateCard2] = useState({location:'', weather:''})
+  //const [isLoaded, updateStatus] = useState(false)
+  const [locationId, updateLocationId] = useState("")
+  //const [secondCoords, updateSecondCoords] = useState("")
+  //const [secondCoordsFetched, updateSecondStatus] = useState("")
+  //const [secondLocationName, updateSecondLocationName] = useState(false)
+  //const [card2, updateCard2] = useState("")
+
+
   useEffect(() => {
     if(locationId.length > 0) {
      getCoords()
       .then(result => {
-        updateSecondCoords(result.position)
-        updateSecondStatus(true)
+        //updateSecondCoords(result.position)
+        //updateSecondStatus(true)
+        const {lat,lng : lon} = result.position
+        fetchAll(lat,lon)
+        .then(values =>  updateCard2({location: values[0][1], weather: values[1]})
+        )
+         .catch(err => err.message)
       })
       .catch(err => console.log(err))
-      if(secondCoordsFetched){
-        console.log("i run")
-        const {lat,lng : lon} = secondCoords
-        const promise1 = fetchWeather(lat, lon);
-        const promise2 = findNearestCity(lat, lon);
-        Promise.all([promise1,promise2])
-        .then(values => {
-          updateCard2(values[0]);
-          updateSecondLocationName(values[1][0]);
-          console.log(card2)
-        })
-         .catch(err => err.message)
-      }
 
     }
 
     
-  },[locationId,secondCoordsFetched])
+  },[locationId])
+
+  const getLocationId = (id) => {
+    updateLocationId(id)
+  }
   const getCoords = async() => {
     const url = 'https://lookup.search.hereapi.com/v1/lookup?apiKey=' + config.hereAPI_key + '&id=' + locationId ;
     const result = await fetch(url)
@@ -67,9 +64,10 @@ function App() {
   const getCurrentCoords = async() => {
     navigator.geolocation.getCurrentPosition(position => {
       updateCurrentCoords(position.coords);
-      updateFetchStatus(true)
+      //updateFetchStatus(true)
     })
   }
+
   const findNearestCity = async(lat,lon) => {
    const url = "http://api.openweathermap.org/geo/1.0/reverse?lat=" + lat +
    "&lon=" + lon + "&limit=5&appid=" + config.openAPI_key
@@ -96,22 +94,27 @@ function App() {
     return weatherData
 
   }
+
+  const fetchAll = async(lat,lon) => {
+    const promise1 = findNearestCity(lat, lon);
+    const promise2 = fetchWeather(lat, lon);
+    Promise.all([promise1,promise2])
+    
+  }
   useEffect(()=> {
     getCurrentCoords();
-    if(coordsFetched){
+    if(currentCoords){
       const {latitude: lat, longitude: lon} = currentCoords;
-      const promise1 = fetchWeather(lat, lon);
-      const promise2 = findNearestCity(lat, lon);
-      Promise.all([promise1,promise2])
+      fetchAll(lat,lon)
       .then(values => {
-        updateCard1(values[0]);
-        updateLocationName(values[1][0]);
-        updateStatus(true)
+        updateCard1({location:values[0][1], weather:values[1]});
+        //updateStatus(true)
       })
-       .catch(err => err.message)
+      .catch(err => err.message)
+      history.push(card1)
     }
 
-  },[currentCoords,coordsFetched,isLoaded])
+  },[currentCoords])
   
 
 
