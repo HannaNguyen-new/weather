@@ -8,6 +8,7 @@ import SearchHistory from "./components/SearchHistory";
 import WeatherCard from "./components/WeatherCard";
 import { React, useState, useEffect, useCallback } from "react";
 
+// test
 // move functions outside component so that i don't need to include them in dependencies array
 // these functions do not reference any props or states
 const findNearestCity = async(lat,lon) => {
