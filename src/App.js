@@ -48,12 +48,13 @@ function App() {
       return coords
     }, [locationId]) 
     
-    
-    const getCurrentCoords = async() => {
-      navigator.geolocation.getCurrentPosition(position => {
-        updateCurrentCoords(position.coords);
-      })
-    }
+  
+    const getCurrentCoords = useCallback(
+      async() => {
+       navigator.geolocation.getCurrentPosition(position => {
+         updateCurrentCoords(position.coords);
+       })
+     },[] )
     
     const fetchAll = useCallback(async(lat,lon) => {
   
@@ -104,7 +105,7 @@ function App() {
       updateHistory(currentHistory => [...currentHistory,card1])
     }
 
-  },[currentCoords, fetchAll, card1])
+  },[getCurrentCoords, currentCoords, fetchAll, card1])
   
  useEffect(() => {
     if(locationId.length > 0) {
