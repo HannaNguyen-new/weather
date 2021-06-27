@@ -29,24 +29,24 @@ function App() {
   const [history, updateHistory] = useState([])
   const [currentCoords,updateCurrentCoords] = useState('')
   const [card1, updateCard1] = useState({location:'', weather:''})
-  const [card2, updateCard2] = useState({location:'', weather:''})
-  const [locationId, updateLocationId] = useState("")
+ // const [card2, updateCard2] = useState({location:'', weather:''})
+//  const [locationId, updateLocationId] = useState("")
   const [firstLoad, updateFirstLoad] = useState(false)
   
   
   
   
-  const getLocationId = (id) => {
-    updateLocationId(id)
-  }
+  // const getLocationId = (id) => {
+  //   updateLocationId(id)
+  // }
   
-  const getCoords = useCallback(
-    async() => {
-      const url = 'https://lookup.search.hereapi.com/v1/lookup?apiKey=' + config.hereAPI_key + '&id=' + locationId ;
-      const result = await fetch(url)
-      const coords =  result.json()
-      return coords
-    }, [locationId]) 
+  // const getCoords = useCallback(
+  //   async() => {
+  //     const url = 'https://lookup.search.hereapi.com/v1/lookup?apiKey=' + config.hereAPI_key + '&id=' + locationId ;
+  //     const result = await fetch(url)
+  //     const coords =  result.json()
+  //     return coords
+  //   }, [locationId]) 
     
   
     const getCurrentCoords = useCallback(
@@ -105,29 +105,36 @@ function App() {
       updateHistory(currentHistory => [...currentHistory,card1])
     }
 
-  },[getCurrentCoords, currentCoords, fetchAll, card1])
+  },[])
   
- useEffect(() => {
-    if(locationId.length > 0) {
-     getCoords()
-      .then(result => {
-        const {lat,lng : lon} = result.position
-        fetchAll(lat,lon)
-        .then(values =>  updateCard2({location: values[0][1], weather: values[1]})
-        )
-      })
-      .catch(err => err.message)
+//  useEffect(() => {
+//     if(locationId.length > 0) {
+//      getCoords()
+//       .then(result => {
+//         const {lat,lng : lon} = result.position
+//         fetchAll(lat,lon)
+//         .then(values =>  updateCard2({location: values[0][1], weather: values[1]})
+//         )
+//       })
+//       .catch(err => err.message)
 
-    }
-  },[locationId, getCoords, fetchAll])
+//     }
+//   },[locationId, getCoords, fetchAll])
+
+// <SearchBar  /> getId={getLocationId}
+// <WeatherCard card1={card1}  card2={card2} />
+// <SearchHistory history={history}/>
+// <DaysBar />
+// <HoursSlider />
+// <MainDisplay />
 
   if (firstLoad) {
     return (
       <div className="App">
 
         <div className='container'>
-          <SearchBar getId={getLocationId} />
-          <WeatherCard card1={card1}  card2={card2} />
+          <SearchBar  /> 
+          <WeatherCard card1={card1}  />
           <SearchHistory history={history}/>
           <DaysBar />
           <HoursSlider />
