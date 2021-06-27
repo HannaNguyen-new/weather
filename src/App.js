@@ -10,13 +10,13 @@ import { useState, useEffect } from "react";
 function App() {
   const [data, updateData] = useState(fetchWeather())
   async function fetchWeather(){
-   const geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=fukuoka&appid=b215978ae0b5adea831c87cd99ac6d51";
+   const geoUrl = "http://api.openweathermap.org/geo/1.0/direct?q=fukuoka&appid=59eeb0d41084e9b5bdbb46f896deec21";
     const response = await fetch(geoUrl)
     const coordinates = await response.json()
+    console.log(coordinates)
+    const { lat, lon } =  coordinates[0]
     
-    const { lat, lon } = coordinates[0]
-    
-   const url =  "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=minutely&appid=b215978ae0b5adea831c87cd99ac6d51"
+   const url =  "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=minutely&appid=59eeb0d41084e9b5bdbb46f896deec21"
     const result = await fetch(url)
     const weatherData = await result.json()
     .then(res => res)
