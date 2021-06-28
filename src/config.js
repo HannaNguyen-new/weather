@@ -1,5 +1,5 @@
 const config = {
-    openAPI_key : '8324dbbddd8c75efc68674b50dc3dbc5',
+    openAPI_key : '59eeb0d41084e9b5bdbb46f896deec21',
     hereAPI_key : 'SIa3lD9mGs3uMTxN9OEZlk7FRZRKbbPwfEAv8D_8QHs',
     mapsAPI_key : 'AIzaSyDhKOX7YRtG_8aNN4RTIoGKrWWMDi9FzXU'
 }

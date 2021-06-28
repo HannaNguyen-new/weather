@@ -6,7 +6,7 @@ import MainDisplay from "./components/MainDisplay";
 import SearchBar from "./components/SearchBar";
 import SearchHistory from "./components/SearchHistory";
 import WeatherCard from "./components/WeatherCard";
-import { React, useState, useEffect, useCallback } from "react";
+import { React, useState, useEffect} from "react";
 
 // test
 // move functions outside component so that i don't need to include them in dependencies array
@@ -26,7 +26,7 @@ function App() {
   // const utc = Date.UTC(year,month-1,date,hour)
   // const epoch = Math.floor(utc/1000) 
   
-  const [history, updateHistory] = useState([])
+  //const [history, updateHistory] = useState([])
   const [currentCoords,updateCurrentCoords] = useState('')
   const [card1, updateCard1] = useState({location:'', weather:''})
  // const [card2, updateCard2] = useState({location:'', weather:''})
@@ -49,19 +49,17 @@ function App() {
   //   }, [locationId]) 
     
   
-    const getCurrentCoords = useCallback(
-      async() => {
+    const getCurrentCoords = async() => {
        navigator.geolocation.getCurrentPosition(position => {
          updateCurrentCoords(position.coords);
        })
-     },[] )
+     }
     
-    const fetchAll = useCallback(async(lat,lon) => {
-  
+    const fetchAll = async(lat,lon) => {
       const promise1 = findNearestCity(lat, lon);
       const promise2 = fetchWeather(lat, lon);
       Promise.all([promise1,promise2])
-    },[])
+    }
     
     const findNearestCity = async(lat,lon) => {
       const url = "http://api.openweathermap.org/geo/1.0/reverse?lat=" + lat +
@@ -92,9 +90,10 @@ function App() {
 
 
   useEffect(()=> {
-
+    console.log("i run")
     getCurrentCoords();
     if(currentCoords.length > 0){
+      console.log(currentCoords)
       const {latitude: lat, longitude: lon} = currentCoords;
       fetchAll(lat,lon)
       .then(values => {
@@ -102,9 +101,8 @@ function App() {
         updateFirstLoad(true)
       })
       .catch(err => err.message)
-      updateHistory(currentHistory => [...currentHistory,card1])
+      //updateHistory(currentHistory => [...currentHistory,card1])
     }
-
   },[])
   
 //  useEffect(() => {
@@ -135,7 +133,7 @@ function App() {
         <div className='container'>
           <SearchBar  /> 
           <WeatherCard card1={card1}  />
-          <SearchHistory history={history}/>
+          <SearchHistory />
           <DaysBar />
           <HoursSlider />
           <MainDisplay />
