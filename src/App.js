@@ -12,6 +12,39 @@ import { React, useState, useEffect} from "react";
 // move functions outside component so that i don't need to include them in dependencies array
 // these functions do not reference any props or states
 
+const fetchAll = async(lat,lon) => {
+  const promise1 = findNearestCity(lat, lon);
+  const promise2 = fetchWeather(lat, lon);
+  Promise.all([promise1,promise2])
+}
+
+const findNearestCity = async(lat,lon) => {
+  const url = "http://api.openweathermap.org/geo/1.0/reverse?lat=" + lat +
+  "&lon=" + lon + "&limit=5&appid=" + config.openAPI_key
+  const result = await fetch(url)
+ const nearestCities = await result.json()
+ if (!result.ok) {
+ const message = `Error: ${result.status}`
+ throw new Error(message)
+ }
+ return nearestCities
+ }
+
+ const fetchWeather = async(lat,lon) => {
+
+   const url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + 
+   "&lon=" + lon + "&exclude=minutely&appid=" + config.openAPI_key + '&units=metric'
+   const result = await fetch(url)
+   const weatherData = await result.json()
+
+   if (!result.ok) {
+     const message = `Error: ${result.status}`
+     throw new Error(message)
+   }
+   return weatherData
+
+ }
+
 
 
 
@@ -29,11 +62,16 @@ function App() {
   //const [history, updateHistory] = useState([])
   const [currentCoords,updateCurrentCoords] = useState('')
   const [card1, updateCard1] = useState({location:'', weather:''})
- // const [card2, updateCard2] = useState({location:'', weather:''})
-//  const [locationId, updateLocationId] = useState("")
+  // const [card2, updateCard2] = useState({location:'', weather:''})
+  //  const [locationId, updateLocationId] = useState("")
   const [firstLoad, updateFirstLoad] = useState(false)
   
   
+  const getCurrentCoords = () => {
+     navigator.geolocation.getCurrentPosition(position => {
+       updateCurrentCoords(position.coords);
+     })
+   }
   
   
   // const getLocationId = (id) => {
@@ -48,52 +86,11 @@ function App() {
   //     return coords
   //   }, [locationId]) 
     
-  
-    const getCurrentCoords = async() => {
-       navigator.geolocation.getCurrentPosition(position => {
-         updateCurrentCoords(position.coords);
-       })
-     }
-    
-    const fetchAll = async(lat,lon) => {
-      const promise1 = findNearestCity(lat, lon);
-      const promise2 = fetchWeather(lat, lon);
-      Promise.all([promise1,promise2])
-    }
-    
-    const findNearestCity = async(lat,lon) => {
-      const url = "http://api.openweathermap.org/geo/1.0/reverse?lat=" + lat +
-      "&lon=" + lon + "&limit=5&appid=" + config.openAPI_key
-      const result = await fetch(url)
-     const nearestCities = await result.json()
-     if (!result.ok) {
-     const message = `Error: ${result.status}`
-     throw new Error(message)
-     }
-     return nearestCities
-     }
-    
-     const fetchWeather = async(lat,lon) => {
-    
-       const url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + 
-       "&lon=" + lon + "&exclude=minutely&appid=" + config.openAPI_key + '&units=metric'
-       const result = await fetch(url)
-       const weatherData = await result.json()
-    
-       if (!result.ok) {
-         const message = `Error: ${result.status}`
-         throw new Error(message)
-       }
-       return weatherData
-    
-     }
 
 
   useEffect(()=> {
-    console.log("i run")
     getCurrentCoords();
-    if(currentCoords.length > 0){
-      console.log(currentCoords)
+    if(currentCoords){
       const {latitude: lat, longitude: lon} = currentCoords;
       fetchAll(lat,lon)
       .then(values => {
@@ -102,8 +99,10 @@ function App() {
       })
       .catch(err => err.message)
       //updateHistory(currentHistory => [...currentHistory,card1])
+
     }
-  },[])
+    
+  },[currentCoords.latitude, currentCoords.longitude])
   
 //  useEffect(() => {
 //     if(locationId.length > 0) {
