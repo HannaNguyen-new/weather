@@ -60,20 +60,25 @@ function App() {
   // const epoch = Math.floor(utc/1000) 
   
   //const [history, updateHistory] = useState([])
-  const [currentCoords,updateCurrentCoords] = useState('')
-  const [card1, updateCard1] = useState({location:'', weather:''})
+  const [currentCoords,setCurrentCoords] = useState('')
+  const [card1, setCard1] = useState({location:'', weather:''})
   // const [card2, updateCard2] = useState({location:'', weather:''})
   //  const [locationId, updateLocationId] = useState("")
-  const [firstLoad, updateFirstLoad] = useState(false)
+  const [firstLoad, setFirstLoad] = useState(false)
   
   
-  const getCurrentCoords = () => {
-     navigator.geolocation.getCurrentPosition(position => {
-       updateCurrentCoords(position.coords);
-     })
-   }
-  
-  
+
+  const success = (position) => {
+    setCurrentCoords(position.coords)
+    console.log(position.coords)
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const getCurrentCoords = () => navigator.geolocation.watchPosition(success)
+    getCurrentCoords()
+
+  }, [])
+
   // const getLocationId = (id) => {
   //   updateLocationId(id)
   // }
@@ -85,24 +90,21 @@ function App() {
   //     const coords =  result.json()
   //     return coords
   //   }, [locationId]) 
-    
-
 
   useEffect(()=> {
-    getCurrentCoords();
-    if(currentCoords){
+    console.log("i run second")
       const {latitude: lat, longitude: lon} = currentCoords;
       fetchAll(lat,lon)
       .then(values => {
-        updateCard1({location:values[0][1], weather:values[1]});
-        updateFirstLoad(true)
+        setCard1({location:values[0][1], weather:values[1]});
+        setFirstLoad(true)
       })
       .catch(err => err.message)
       //updateHistory(currentHistory => [...currentHistory,card1])
 
-    }
     
-  },[currentCoords.latitude, currentCoords.longitude])
+    
+  },[currentCoords])
   
 //  useEffect(() => {
 //     if(locationId.length > 0) {
@@ -142,6 +144,7 @@ function App() {
       </div>
     )
   }else{
+    console.log("i run first")
     return (
       <div>
         <h1 className="App">Loading...We're getting everything ready !</h1>
