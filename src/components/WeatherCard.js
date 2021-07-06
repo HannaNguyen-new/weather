@@ -1,6 +1,7 @@
 import React from "react"
 
 function WeatherCard(props) {
+   console.log(props)
    const current = props.card1.current
    const card2 = props.card2.current || false
 if(card2){
