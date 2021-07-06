@@ -60,7 +60,7 @@ function App() {
   // const epoch = Math.floor(utc/1000) 
   
   //const [history, updateHistory] = useState([])
-  const [currentCoords,setCurrentCoords] = useState('')
+
   const [card1, setCard1] = useState({location:'', weather:''})
   // const [card2, updateCard2] = useState({location:'', weather:''})
   //  const [locationId, updateLocationId] = useState("")
@@ -68,16 +68,10 @@ function App() {
   
   
 
-  const success = (position) => {
-    setCurrentCoords(position.coords)
-    console.log(position.coords)
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    const getCurrentCoords = () => navigator.geolocation.watchPosition(success)
-    getCurrentCoords()
 
-  }, [])
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+
 
   // const getLocationId = (id) => {
   //   updateLocationId(id)
@@ -92,7 +86,8 @@ function App() {
   //   }, [locationId]) 
 
   useEffect(()=> {
-    console.log("i run second")
+    let currentCoords;
+     navigator.geolocation.watchPosition(position => currentCoords = position.coords)
       const {latitude: lat, longitude: lon} = currentCoords;
       fetchAll(lat,lon)
       .then(values => {
@@ -104,7 +99,7 @@ function App() {
 
     
     
-  },[currentCoords])
+  },[])
   
 //  useEffect(() => {
 //     if(locationId.length > 0) {
@@ -144,7 +139,6 @@ function App() {
       </div>
     )
   }else{
-    console.log("i run first")
     return (
       <div>
         <h1 className="App">Loading...We're getting everything ready !</h1>
