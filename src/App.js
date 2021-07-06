@@ -130,7 +130,6 @@ function App() {
   if (firstLoad) {
     return (
       <div className="App">
-
         <div className='container'>
           <SearchBar  /> 
           <WeatherCard card1={card1}  />
