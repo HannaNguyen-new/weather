@@ -60,13 +60,13 @@ function App() {
   // const epoch = Math.floor(utc/1000) 
   
   //const [history, updateHistory] = useState([])
-
+  const [currentCoords, setCurrentCoords] = useState({})
   const [card1, setCard1] = useState({location:'', weather:''})
   // const [card2, updateCard2] = useState({location:'', weather:''})
   //  const [locationId, updateLocationId] = useState("")
   const [firstLoad, setFirstLoad] = useState(false)
   
-  
+
 
 
   
@@ -86,8 +86,14 @@ function App() {
   //   }, [locationId]) 
 
   useEffect(()=> {
-    let currentCoords;
-     navigator.geolocation.watchPosition(position => currentCoords = position.coords)
+
+    navigator.permissions.query({name:'geolocation'}).then(result => {
+      if(result.state === 'granted'){
+        navigator.geolocation.watchPosition(position => setCurrentCoords(position.coords))
+      }
+    })
+
+    if(currentCoords.latitude !== undefined){
       const {latitude: lat, longitude: lon} = currentCoords;
       fetchAll(lat,lon)
       .then(values => {
@@ -97,9 +103,11 @@ function App() {
       .catch(err => err.message)
       //updateHistory(currentHistory => [...currentHistory,card1])
 
+    }
+
     
     
-  },[])
+  },[currentCoords, card1])
   
 //  useEffect(() => {
 //     if(locationId.length > 0) {
