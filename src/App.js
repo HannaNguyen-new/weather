@@ -6,7 +6,7 @@ import MainDisplay from "./components/MainDisplay";
 import SearchBar from "./components/SearchBar";
 import SearchHistory from "./components/SearchHistory";
 import WeatherCard from "./components/WeatherCard";
-import { React, useState, useEffect} from "react";
+import { React, useState, useEffect, useMemo} from "react";
 
 // test
 // move functions outside component so that i don't need to include them in dependencies array
@@ -15,7 +15,7 @@ import { React, useState, useEffect} from "react";
 const fetchAll = async(lat,lon) => {
   const promise1 = findNearestCity(lat, lon);
   const promise2 = fetchWeather(lat, lon);
-  Promise.all([promise1,promise2])
+  return Promise.all([promise1,promise2])
 }
 
 const findNearestCity = async(lat,lon) => {
@@ -59,15 +59,35 @@ function App() {
   // const utc = Date.UTC(year,month-1,date,hour)
   // const epoch = Math.floor(utc/1000) 
   
-  //const [history, updateHistory] = useState([])
   const [currentCoords, setCurrentCoords] = useState({})
   const [card1, setCard1] = useState({location:'', weather:''})
   // const [card2, updateCard2] = useState({location:'', weather:''})
   //  const [locationId, updateLocationId] = useState("")
   const [firstLoad, setFirstLoad] = useState(false)
-  
 
+  const createHistory = (card1) => {
+    let history = []
+    const {location, weather} = card1
+    const {lat,lon} = weather
+  if(history.length < 1){
+    history.push({'location': location, 'position': {lat, lon}})
+  }else{
+    for(let card in history){
+      if(card1.location !== card.location){
+        history.push(card1)
+      }
+      if(card1.weather.current.temp !== card.weather.current.temp){
+        card.weather = card1.weather
 
+      }
+    }
+  }
+  return history
+}
+
+const history = useMemo(() => card1.location? createHistory(card1):[], [card1])
+console.log(history)
+// console.log(createHistory(card1))
 
   
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,29 +106,25 @@ function App() {
   //   }, [locationId]) 
 
   useEffect(()=> {
-
     navigator.permissions.query({name:'geolocation'}).then(result => {
       if(result.state === 'granted'){
         navigator.geolocation.watchPosition(position => setCurrentCoords(position.coords))
       }
     })
 
-    if(currentCoords.latitude !== undefined){
+    // without this condition, fetchAll will run with undefined lat & lon => lead to error 
+    // with this condition, when currentCoords is updated => useEffect run again => fetchAll fetched all data back and firstLoad is true, render is run!
+    if(currentCoords.latitude){  
       const {latitude: lat, longitude: lon} = currentCoords;
       fetchAll(lat,lon)
       .then(values => {
-        setCard1({location:values[0][1], weather:values[1]});
+        setCard1(prevState => Object.assign(prevState,{location:values[0][0]["name"], weather:values[1]}));
         setFirstLoad(true)
       })
       .catch(err => err.message)
-      //updateHistory(currentHistory => [...currentHistory,card1])
 
     }
-
-    
-    
-  },[currentCoords, card1])
-  
+  },[currentCoords, firstLoad])
 //  useEffect(() => {
 //     if(locationId.length > 0) {
 //      getCoords()

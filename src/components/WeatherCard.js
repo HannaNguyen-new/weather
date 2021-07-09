@@ -1,22 +1,20 @@
 import React from "react"
 
 function WeatherCard(props) {
-   console.log(props)
-   const current = props.card1.current
-   const card2 = props.card2.current || false
+   const{card1, card2} = props
 if(card2){
    return (
       <div className="cardContainer">
       <div className='weatherCard' id='card1'>
-         <h2 className='location'>{props.location1.name}</h2>
-         <p className='status'>{current.weather[0].description}</p>
-         <h1 className='temp'>{current.temp}º</h1>
+         <h2 className='location'>{card1.location}</h2>
+         <p className='status'>{card1.weather.current.weather.description}</p>
+         <h1 className='temp'>{card1.weather.current.temp}º</h1>
       </div>
      
       <div className='weatherCard' id='card2'>
-         <h2 className='location'>{props.location2.name}</h2>
-         <p className='status'>{card2.weather[0].description}</p>
-         <h1 className='temp'>{card2.temp}º</h1>
+         <h2 className='location'>{card2.location}</h2>
+         <p className='status'>{card2.weather.current.weather.description}</p>
+         <h1 className='temp'>{card2.weather.current.temp}º</h1>
       </div>
 
       </div>
@@ -25,9 +23,9 @@ if(card2){
 return(
       <div className="cardContainer">
       <div className='weatherCard' id='card1'>
-         <h2 className='location'>{props.location1.name}</h2>
-         <p className='status'>{current.weather[0].description}</p>
-         <h1 className='temp'>{current.temp}º</h1>
+         <h2 className='location'>{card1.location}</h2>
+         <p className='status'>{card1.weather.current.weather.description}</p>
+         <h1 className='temp'>{card1.weather.current.temp}º</h1>
       </div>
 
       
