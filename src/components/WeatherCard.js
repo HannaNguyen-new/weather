@@ -7,7 +7,7 @@ if(card2){
       <div className="cardContainer">
       <div className='weatherCard' id='card1'>
          <h2 className='location'>{card1.location}</h2>
-         <p className='status'>{card1.weather.current.weather.description}</p>
+         <p className='status'>{card1.weather.current.weather[0].description}</p>
          <h1 className='temp'>{card1.weather.current.temp}º</h1>
       </div>
      
@@ -24,7 +24,7 @@ return(
       <div className="cardContainer">
       <div className='weatherCard' id='card1'>
          <h2 className='location'>{card1.location}</h2>
-         <p className='status'>{card1.weather.current.weather.description}</p>
+         <p className='status'>{card1.weather.current.weather[0].description}</p>
          <h1 className='temp'>{card1.weather.current.temp}º</h1>
       </div>
 

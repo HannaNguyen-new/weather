@@ -74,11 +74,7 @@ function App() {
   }else{
     for(let card in history){
       if(card1.location !== card.location){
-        history.push(card1)
-      }
-      if(card1.weather.current.temp !== card.weather.current.temp){
-        card.weather = card1.weather
-
+        history.push({'location': location, 'position': {lat, lon}})
       }
     }
   }
@@ -86,7 +82,6 @@ function App() {
 }
 
 const history = useMemo(() => card1.location? createHistory(card1):[], [card1])
-console.log(history)
 // console.log(createHistory(card1))
 
   
@@ -152,7 +147,7 @@ console.log(history)
         <div className='container'>
           <SearchBar  /> 
           <WeatherCard card1={card1}  />
-          <SearchHistory />
+          <SearchHistory history={history} />
           <DaysBar />
           <HoursSlider />
           <MainDisplay />
