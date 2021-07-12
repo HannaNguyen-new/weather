@@ -1,31 +1,29 @@
 import { React, useState } from "react";
 import Suggestion from "./Suggestion"
-import {Client} from "@googlemaps/google-maps-services-js";
 
 function SearchBar(props) {
   const [input, updateInput] = useState("");
   const [suggestion, updateSuggestion] = useState("")
   // const url = "https://maps.googleapis.com/maps/api/place/queryautocomplete/json";
   // const url = "https://autocomplete.search.hereapi.com/v1/autocomplete";
-
+  const google = window.google
+  const service = new google.maps.places.AutocompleteService()
+  const displaySuggestions = (predictions, status) => {
+    if(status !== google.maps.places.PlacesServiceStatus.OK || !predictions){
+      alert(status);
+      return;
+    }
+    updateSuggestion(predictions)
+    console.log(predictions)
+  }
   
 
   const search = (event) => {
-    const client = new Client({});
-    const { value } = event.target;
-    if (value.length > 1) {
+    const value = event.target.value;
+    if (value.length > 0) {
       updateInput(value)
-      client
-      .elevation({
-        params:{'input': input}
-      })
-      .then(res => {
-          console.log(res.data.results[0].elevation)
-          //updateSuggestion(arr);
-        })
-      .catch(e => console.log(e.response.data.error_message))
+      service.getQueryPredictions({"input" : input}, displaySuggestions)
     }
-    updateSuggestion("")
   };
   // const search = (event) => {
   //   const { value } = event.target;
