@@ -92,13 +92,6 @@ const history = useMemo(() => card1.location? createHistory(card1):[], [card1])
   //   updateLocationId(id)
   // }
   
-  // const getCoords = useCallback(
-  //   async() => {
-  //     const url = 'https://lookup.search.hereapi.com/v1/lookup?apiKey=' + config.hereAPI_key + '&id=' + locationId ;
-  //     const result = await fetch(url)
-  //     const coords =  result.json()
-  //     return coords
-  //   }, [locationId]) 
 
   useEffect(()=> {
     navigator.permissions.query({name:'geolocation'}).then(result => {
@@ -141,6 +134,23 @@ const history = useMemo(() => card1.location? createHistory(card1):[], [card1])
 // <HoursSlider />
 // <MainDisplay />
 
+const google = window.google
+const passId = (id) => {
+  const request = {
+    placeId: id,
+    fields: ['name', 'rating', 'formatted_phone_number', 'geometry']
+  };
+  
+  const service = new google.maps.places.PlacesService();
+  console.log(service)
+  service.getDetails(request, callback);
+  
+  function callback(place, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      console.log(place)
+    }
+  }
+}
     return (
       <div className="App">
         {firstLoad ? (
@@ -156,9 +166,8 @@ const history = useMemo(() => card1.location? createHistory(card1):[], [card1])
           <h1 className="App">Loading...We're getting everything ready !</h1>
         )
         }
-      </div>
-    )
-  }
+       </div>
+    ) 
+      }
 
-
-export default App;
+export default App
