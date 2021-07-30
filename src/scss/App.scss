@@ -84,7 +84,7 @@
   .slider {
     @include size(3px, 240px, 5px, 0);
     @extend %clearDefault;
-    transform: rotate(270deg) translate(-115px, -70px);
+    transform: rotate(90deg) translate(115px, 50px);
     cursor: pointer;
     background: $secondary-color;
   }
@@ -113,5 +113,16 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+  }
+}
+.suggestion {
+  width: 600px;
+  @extend %glass;
+  opacity: 0.5;
+  margin: 27px auto;
+  text-align: center;
+  
+  div:hover {
+    @extend %hover;
   }
 }
