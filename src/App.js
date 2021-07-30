@@ -141,29 +141,24 @@ const history = useMemo(() => card1.location? createHistory(card1):[], [card1])
 // <HoursSlider />
 // <MainDisplay />
 
-  if (firstLoad) {
     return (
       <div className="App">
-        <div className='container'>
-          <SearchBar  /> 
-          <WeatherCard card1={card1}  />
-          <SearchHistory history={history} />
-          <DaysBar />
-          <HoursSlider />
-          <MainDisplay />
-
-        </div>
-
-      </div>
-    )
-  }else{
-    return (
-      <div>
-        <h1 className="App">Loading...We're getting everything ready !</h1>
+        {firstLoad ? (
+            <div className='container'>
+              <SearchBar  /> 
+              <WeatherCard card1={card1}  />
+              <SearchHistory history={history} />
+              <DaysBar />
+              <HoursSlider />
+              <MainDisplay />
+            </div>
+        ) : (
+          <h1 className="App">Loading...We're getting everything ready !</h1>
+        )
+        }
       </div>
     )
   }
 
-}
 
 export default App;
