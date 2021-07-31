@@ -6,9 +6,10 @@ import MainDisplay from "./components/MainDisplay";
 import SearchBar from "./components/SearchBar";
 import SearchHistory from "./components/SearchHistory";
 import WeatherCard from "./components/WeatherCard";
-import { React, useState, useEffect, useMemo} from "react";
+import { React, useState, useEffect} from "react";
 
-// test
+const google = window.google
+const geoCoderService = new google.maps.Geocoder();
 // move functions outside component so that i don't need to include them in dependencies array
 // these functions do not reference any props or states
 
@@ -30,6 +31,7 @@ const findNearestCity = async(lat,lon) => {
  return nearestCities
  }
 
+
  const fetchWeather = async(lat,lon) => {
 
    const url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + 
@@ -45,10 +47,6 @@ const findNearestCity = async(lat,lon) => {
 
  }
 
-
-
-
-
 function App() {
   
   // get current time
@@ -61,37 +59,27 @@ function App() {
   
   const [currentCoords, setCurrentCoords] = useState({})
   const [card1, setCard1] = useState({location:'', weather:''})
-  // const [card2, updateCard2] = useState({location:'', weather:''})
-  //  const [locationId, updateLocationId] = useState("")
+  const [card2, setCard2] = useState({location:'', weather:''})
   const [firstLoad, setFirstLoad] = useState(false)
-
-  const createHistory = (card1) => {
-    let history = []
-    const {location, weather} = card1
-    const {lat,lon} = weather
-  if(history.length < 1){
-    history.push({'location': location, 'position': {lat, lon}})
-  }else{
-    for(let card in history){
-      if(card1.location !== card.location){
-        history.push({'location': location, 'position': {lat, lon}})
-      }
-    }
-  }
-  return history
-}
-
-const history = useMemo(() => card1.location? createHistory(card1):[], [card1])
-// console.log(createHistory(card1))
-
+  //const [history, setHistory] = useState([])
   
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-
-
-  // const getLocationId = (id) => {
-  //   updateLocationId(id)
+  // const createHistory = (chosenCard) => {
+  //   let history = []
+  //   const {location, weather} = chosenCard
+  //   const {lat,lon} = weather
+  //   if(history.length < 1){
+  //     history.push({'location': location, 'position': {lat, lon}})
+  //   }else{
+  //     for(let card in history){
+  //       if(chosenCard.location !== card.location){
+  //         history.push({'location': location, 'position': {lat, lon}})
+  //       }
+  //     }
+  //   }
+  //   return history
   // }
   
+
 
   useEffect(()=> {
     navigator.permissions.query({name:'geolocation'}).then(result => {
@@ -108,56 +96,43 @@ const history = useMemo(() => card1.location? createHistory(card1):[], [card1])
       .then(values => {
         setCard1(prevState => Object.assign(prevState,{location:values[0][0]["name"], weather:values[1]}));
         setFirstLoad(true)
+        //setHistory(createHistory(card1))
       })
       .catch(err => err.message)
-
+      
     }
   },[currentCoords, firstLoad])
-//  useEffect(() => {
-//     if(locationId.length > 0) {
-//      getCoords()
-//       .then(result => {
-//         const {lat,lng : lon} = result.position
-//         fetchAll(lat,lon)
-//         .then(values =>  updateCard2({location: values[0][1], weather: values[1]})
-//         )
-//       })
-//       .catch(err => err.message)
-
-//     }
-//   },[locationId, getCoords, fetchAll])
-
-// <SearchBar  /> getId={getLocationId}
-// <WeatherCard card1={card1}  card2={card2} />
-// <SearchHistory history={history}/>
-// <DaysBar />
-// <HoursSlider />
-// <MainDisplay />
-
-const google = window.google
-const passId = (id) => {
-  const request = {
-    placeId: id,
-    fields: ['name', 'rating', 'formatted_phone_number', 'geometry']
-  };
   
-  const service = new google.maps.places.PlacesService();
-  console.log(service)
-  service.getDetails(request, callback);
   
-  function callback(place, status) {
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-      console.log(place)
+  const getId = (id) => {
+    const request = {
+      placeId: id
+    };
+    
+    function callback(result, status) {
+      if (status ===  "OK") {
+        const place = result[0];
+        const {geometry} = place;
+        const lat = geometry.location.lat()
+        const lon = geometry.location.lng()
+        fetchAll(lat,lon)
+        .then(values => {
+          setCard2(prevState => Object.assign(prevState,{location:values[0][0]["name"], weather:values[1]}));
+          //setHistory(createHistory(card1))
+          console.log(card2)
+        })
+        
     }
   }
+  geoCoderService.geocode(request, callback);
 }
     return (
       <div className="App">
         {firstLoad ? (
             <div className='container'>
-              <SearchBar  /> 
-              <WeatherCard card1={card1}  />
-              <SearchHistory history={history} />
+              <SearchBar passId = {getId}  /> 
+              <WeatherCard cards = {[card1, card2]} />
+              <SearchHistory />
               <DaysBar />
               <HoursSlider />
               <MainDisplay />
@@ -171,3 +146,15 @@ const passId = (id) => {
       }
 
 export default App
+
+// reverse geocode using goole API
+// const findNearestCityTest = (lat,lon) => {
+//   const LatLng = new google.maps.LatLng(lat,lon)
+//   const request = {location : LatLng}
+//   function callback(result, status) {
+//     if(status === "OK"){
+//       console.log(result)
+//     }
+//   }
+//   geoCoderService.geocode(request, callback)
+// }

@@ -2,27 +2,26 @@ import { React, useState } from "react";
 
 function SearchBar(props) {
   const {passId} = props
-  const [input, updateInput] = useState("");
-  const [suggestion, updateSuggestion] = useState([])
+  const [input, setInput] = useState("");
+  const [suggestion, setSuggestion] = useState([])
   const google = window.google
   const service = new google.maps.places.AutocompleteService()
   const displaySuggestions = (predictions, status) => {
-    if(status !== google.maps.places.PlacesServiceStatus.OK || !predictions){
-      console.log(status);
+    if(status !== "OK" || !predictions){
       return;
     }
-    updateSuggestion(predictions)
+    setSuggestion(predictions)
   }
   
 
   const search = (event) => {
-    const value = event.target.value;
+    const {value} = event.target;
     if (value.length > 0) {
-      updateInput(value)
+      setInput(value)
       service.getQueryPredictions({"input" : input}, displaySuggestions)
     }else{
-      updateInput("")
-      updateSuggestion([])
+      setInput("")
+      setSuggestion([])
     }
   };
 
